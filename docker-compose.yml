@@ -1,0 +1,27 @@
+version: '3'
+services:
+  app:
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    environment:
+      MONGODB_HOST: mongo:27017
+      MONGODB_USER: teste
+      MONGODB_PASSWORD: teste
+      FLASK_ENV: development
+      JWT_SECRET_KEY: teste
+    volumes:
+      - ./backend/src:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: teste
+      MONGO_INITDB_ROOT_PASSWORD: teste
