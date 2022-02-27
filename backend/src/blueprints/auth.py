@@ -25,15 +25,15 @@ def login():
             raise ValidationException('Missing password')
 
         user = UserService.verify_password(data.get('username'), data.get('password'))
-        if user:
-            token = SessionService.insert_token(user['_id'])
-            
-            return DefaultResponse.success_response('Login successful', {
-                **user,
-                'token': token
-            })
-        else:
-            return DefaultResponse.failed_response('Invalid user/password')
+        token = SessionService.insert_token(user['_id'])
+        
+        return DefaultResponse.success_response('Login successful', {
+            **user,
+            'token': token
+        })
+
+    except ValidationException as e:
+        return DefaultResponse.failed_response(str(e))
 
     except BaseException:
         logger.error('', exc_info=True)
