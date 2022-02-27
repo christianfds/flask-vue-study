@@ -26,9 +26,10 @@ def login():
 
         user = UserService.verify_password(data.get('username'), data.get('password'))
         if user:
-            token = SessionService.insert_token(user)
+            token = SessionService.insert_token(user['_id'])
             
             return DefaultResponse.success_response('Login successful', {
+                **user,
                 'token': token
             })
         else:

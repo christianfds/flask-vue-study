@@ -1,8 +1,10 @@
 from flask import Flask
+from flask_cors import CORS
 from blueprints.auth import auth_app
 from blueprints.photos import photos_app
 
 app = Flask(__name__)
+CORS(app)
 app.url_map.strict_slashes = False
 
 app.register_blueprint(auth_app, url_prefix='/auth')

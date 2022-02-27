@@ -19,7 +19,9 @@ class UserService:
         if not check_password_hash(found_user.get('password'), password):
             raise ValidationException('Invalid username/password')
 
-        return str(found_user.get('_id'))
+        found_user['_id'] = str(found_user['_id'])
+
+        return found_user
 
     @staticmethod
     def register_user(username: str, password: str):
