@@ -4,6 +4,7 @@ from flask import Blueprint, request
 from blueprints.auth import get_current_user
 from helpers.response import DefaultResponse
 from services.photos import PhotosService
+from services.aws import AWSService
 from services.session import token_auth
 
 logger = logging.getLogger('gallery.photos')
@@ -28,7 +29,25 @@ def list_photos():
 @photos_app.route('/', methods=['POST'])
 @token_auth.login_required
 def submit_photo():
-    pass
+    user = get_current_user()
+
+    data = request.json
+    try:
+        title = data['title']
+        file_data = data['file']['data']
+
+        image_url = AWSService.submit_file_from_base64(file_data)
+        PhotosService.submit_photo(user['_id'], title, image_url)
+
+        return DefaultResponse.success_response('File upload successfully')
+    
+    except KeyError as e:
+        logger.error(e, exc_info=True)
+        return DefaultResponse.failed_response(f'Missing `{e}`')
+
+    except Exception as e:
+        logger.error(e, exc_info=True)
+        return DefaultResponse.internal_failed_response()
 
 
 # Admin and non-Admin

@@ -4,10 +4,25 @@ import HeaderButton from "@/components/HeaderButton.vue";
 // import HelloWorld from "@/components/HelloWorld.vue";
 </script>
 
+<script lang="ts">
+export default {
+  name: "HeaderView",
+  computed: {
+    currentUser(): any {
+      return this.$store.state.auth.user;
+    },
+  },
+  mounted() {
+    if (!this.currentUser) {
+      this.$router.push("/login");
+    }
+  },
+};
+</script>
+
 <template>
   <header>
     <!-- <HelloWorld msg="You did it!" /> -->
-
     <nav>
       <HeaderButton
         logout="false"
@@ -22,6 +37,7 @@ import HeaderButton from "@/components/HeaderButton.vue";
         title="About"
       ></HeaderButton>
       <HeaderButton
+        v-if="currentUser"
         logout="true"
         destination="#"
         title="Logout"

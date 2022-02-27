@@ -8,6 +8,7 @@ import Header from "@/components/Header.vue";
   <div id="body">
     <RouterView />
   </div>
+  <!-- <notifications group="general" /> -->
 </template>
 
 <style>

@@ -8,6 +8,9 @@ services:
       MONGODB_HOST: mongo:27017
       MONGODB_USER: teste
       MONGODB_PASSWORD: teste
+      AWS_BUCKET: ${AWS_BUCKET}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
       FLASK_ENV: development
       JWT_SECRET_KEY: teste
     volumes:

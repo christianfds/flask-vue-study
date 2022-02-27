@@ -1,8 +1,12 @@
+import type { AxiosRequestHeaders } from "axios";
+
 export default function authHeader() {
   const user = JSON.parse(localStorage.getItem("user") as string);
-  if (user && user.accessToken) {
-    return { Authorization: "Bearer " + user.accessToken };
+  let header: AxiosRequestHeaders;
+  if (user && user.token) {
+    header = { Authorization: "Bearer " + user.token };
   } else {
-    return {};
+    header = {};
   }
+  return header;
 }
