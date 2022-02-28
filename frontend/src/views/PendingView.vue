@@ -32,7 +32,7 @@ export default {
       this.$router.push("/login");
     }
 
-    userService.getApprovedPosts().then((response) => {
+    userService.getPendingPosts().then((response) => {
       this.posts = response.data.data;
     });
   },

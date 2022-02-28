@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import PendingView from "../views/PendingView.vue";
 import SubmitPostView from "../views/SubmitPostView.vue";
 import LoginRegisterView from "../views/LoginRegisterView.vue";
 
@@ -12,8 +13,13 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: "/about",
-      name: "about",
+      path: "/pending",
+      name: "pending",
+      component: PendingView,
+    },
+    {
+      path: "/upload",
+      name: "upload",
       component: SubmitPostView,
     },
     {

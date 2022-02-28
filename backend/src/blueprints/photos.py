@@ -16,10 +16,12 @@ photos_app = Blueprint('photos_app', __name__)
 @photos_app.route('/', methods=['GET'])
 @token_auth.login_required
 def list_photos():
+    user = get_current_user()
+
     page = request.args.get('page', 0)
     page_size = request.args.get('page_size', 20)
     try:
-        photos = PhotosService.list_photos(page=page, page_size=page_size)
+        photos = PhotosService.list_photos(user_id=user['_id'], page=page, page_size=page_size)
         return DefaultResponse.success_response('Found photos', photos)
     except Exception as e:
         logger.error(e, exc_info=True)
@@ -73,7 +75,21 @@ def get_photo_with_details(photo_id: str):
 @photos_app.route('/<string:photo_id>/comment', methods=['POST'])
 @token_auth.login_required
 def add_comment(photo_id: str):
-    pass
+    user = get_current_user()
+
+    data = request.json
+    try:
+        message = data['message']
+        comment = PhotosService.add_comment(photo_id, user['_id'], message)
+        return DefaultResponse.success_response('Added message', comment)
+    
+    except KeyError as e:
+        logger.error(e, exc_info=True)
+        return DefaultResponse.failed_response(f'Missing `{e}`')
+    
+    except Exception as e:
+        logger.error(e, exc_info=True)
+        return DefaultResponse.internal_failed_response()
 
 
 @photos_app.route('/<string:photo_id>/comment/<string:comment_id>', methods=['DELETE'])
@@ -86,16 +102,39 @@ def delete_comment(photo_id: str, comment_id: str):
 @photos_app.route('/<string:photo_id>/react', methods=['POST'])
 @token_auth.login_required
 def add_reaction(photo_id: str):
-    pass
+    user = get_current_user()
+
+    try:
+        PhotosService.set_reaction(photo_id, user['_id'], True)
+        return DefaultResponse.success_response()
+    
+    except Exception as e:
+        logger.error(e, exc_info=True)
+        return DefaultResponse.internal_failed_response()
+
+
+@photos_app.route('/<string:photo_id>/react', methods=['DELETE'])
+@token_auth.login_required
+def remove_reaction(photo_id: str):
+    user = get_current_user()
+    try:
+        PhotosService.set_reaction(photo_id, user['_id'], False)
+        return DefaultResponse.success_response()
+
+    except Exception as e:
+        logger.error(e, exc_info=True)
+        return DefaultResponse.internal_failed_response()
 
 
 @photos_app.route('/pending', methods=['GET'])
 @token_auth.login_required(role='admin')
 def list_pending_photos():
+    user = get_current_user()
+
     page = request.args.get('page', 0)
     page_size = request.args.get('page_size', 20)
     try:
-        photos = PhotosService.list_photos(status='pending', page=page, page_size=page_size)
+        photos = PhotosService.list_photos(status='pending', user_id=user['_id'], page=page, page_size=page_size)
         return DefaultResponse.success_response('Found photos', photos)
     except Exception as e:
         logger.error(e, exc_info=True)
@@ -110,6 +149,7 @@ def avaliate_photo(photo_id):
     data = request.json
     logger.debug(data)
     try:
+        assert data['status'] in ['accepted', 'rejected']
         photos = PhotosService.avaliate_photo(user['_id'], photo_id, data['status'])
         return DefaultResponse.success_response('Found photos', photos)
     

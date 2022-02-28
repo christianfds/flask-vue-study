@@ -29,7 +29,6 @@ export default {
   components: {
     Form,
     Field,
-    // ErrorMessage,
   },
   data() {
     const schema = yup.object().shape({
@@ -44,7 +43,9 @@ export default {
   },
   computed: {
     currentUser(): any {
-      return this.$store.state.auth.user;
+      return (
+        this.$store?.state?.auth?.user?.data || this.$store?.state?.auth?.user
+      );
     },
   },
   mounted() {

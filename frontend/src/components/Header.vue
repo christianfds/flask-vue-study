@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from "vue-router";
 import HeaderButton from "@/components/HeaderButton.vue";
-// import HelloWorld from "@/components/HelloWorld.vue";
 </script>
 
 <script lang="ts">
@@ -9,7 +8,15 @@ export default {
   name: "HeaderView",
   computed: {
     currentUser(): any {
-      return this.$store.state.auth.user;
+      return (
+        this.$store?.state?.auth?.user?.data || this.$store?.state?.auth?.user
+      );
+    },
+    isAdmin(): boolean {
+      if (this?.currentUser?.roles) {
+        return this.currentUser.roles.indexOf("admin") > 0;
+      }
+      return false;
     },
   },
   mounted() {
@@ -33,8 +40,14 @@ export default {
       <HeaderButton logout="false" destination="/" title="Home"></HeaderButton>
       <HeaderButton
         logout="false"
-        destination="/about"
-        title="About"
+        destination="/upload"
+        title="Upload new image"
+      ></HeaderButton>
+      <HeaderButton
+        v-if="isAdmin"
+        logout="false"
+        destination="/pending"
+        title="Pending images"
       ></HeaderButton>
       <HeaderButton
         v-if="currentUser"
