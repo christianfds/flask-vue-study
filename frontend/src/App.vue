@@ -25,5 +25,7 @@ import Header from "@/components/Header.vue";
   display: flex;
   place-items: center;
   justify-content: center;
+  min-height: calc(100vh - 50px);
+  overflow-x: hidden;
 }
 </style>

@@ -1,21 +1,17 @@
 <template>
   <div>
-    <Form @submit="handleSubmit">
+    <Form @submit="handleLogin">
       <div class="row-thing">
-        <label>Image title: </label> <Field name="title" type="text" />
+        <label>Username: </label> <Field name="username" type="text" />
       </div>
       <div class="row-thing">
-        <label id="input_label" for="file_input">{{ upload_file_text }}</label>
-        <Field
-          id="file_input"
-          name="file_input"
-          type="file"
-          @change="fileChanged"
-        />
+        <label for="password">Password: </label>
+        <Field name="password" type="password" class="form-control" />
       </div>
+
       <button :disabled="loading">
         <span v-show="loading" class="spinner-border spinner-border-sm"></span>
-        <span>Submit</span>
+        <span>Login</span>
       </button>
       <div class="form-group">
         <div v-if="message" class="alert alert-danger" role="alert">
@@ -27,7 +23,6 @@
 </template>
 
 <script setup lang="ts">
-import userService from "@/services/user.service";
 import { Form, Field } from "vee-validate";
 import * as yup from "yup";
 </script>
@@ -37,61 +32,37 @@ export default {
   components: {
     Form,
     Field,
+    // ErrorMessage,
   },
   data() {
     const schema = yup.object().shape({
-      title: yup.string().required("Title is required!"),
-      file_input: yup.mixed().required("File is required"),
+      username: yup.string().required("Username is required!"),
+      password: yup.string().required("Password is required!"),
     });
     return {
       loading: false,
       message: "",
-      upload_file_text: " Choose your file ",
       schema,
     };
   },
   computed: {
-    currentUser(): any {
-      return (
-        this.$store?.state?.auth?.user?.data || this.$store?.state?.auth?.user
-      );
+    loggedIn(): any {
+      return this.$store?.state?.auth?.status?.loggedIn || false;
     },
   },
-  mounted() {
-    if (!this.currentUser) {
-      this.$router.push("/login");
+  created() {
+    if (this.loggedIn) {
+      this.$router.push("/");
     }
   },
   methods: {
-    fileChanged(event: any) {
-      this.upload_file_text =
-        event?.target?.files[0]?.name || " Choose your file ";
-    },
-    async handleSubmit(data: any) {
+    handleLogin(user: any) {
       this.loading = true;
-
-      function toBase64(file: any) {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = (error) => reject(error);
-        });
-      }
-
-      let send_data = {
-        title: data.title,
-        file: {
-          data: await toBase64(data.file_input[0]),
-        },
-      };
-
-      userService.postImage(send_data).then(
+      this.$store.dispatch("auth/login", user).then(
         () => {
-          this.loading = false;
           this.$router.push("/");
         },
-        (error) => {
+        (error: any) => {
           this.loading = false;
           this.message =
             (error.response &&
@@ -131,8 +102,7 @@ form .row-thing input {
   width: 80%;
 }
 
-form button,
-form #input_label {
+form button {
   cursor: pointer;
   display: inline-block;
   color: var(--color-text-link);
@@ -141,15 +111,5 @@ form #input_label {
   border-style: solid;
   border-radius: 5px;
   padding: 5px;
-}
-
-form #input_label {
-  color: rgb(97, 97, 255);
-  width: 100%;
-  text-align: center;
-}
-
-#file_input {
-  display: none;
 }
 </style>

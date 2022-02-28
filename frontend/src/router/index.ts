@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import PendingView from "../views/PendingView.vue";
 import SubmitPostView from "../views/SubmitPostView.vue";
-import LoginRegisterView from "../views/LoginRegisterView.vue";
+import LoginView from "../views/LoginView.vue";
+import RegisterView from "../views/RegisterView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,13 +26,18 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
-      component: LoginRegisterView,
+      component: LoginView,
+    },
+    {
+      path: "/register",
+      name: "register",
+      component: RegisterView,
     },
   ],
 });
 
 router.beforeEach((to, from, next) => {
-  const publicPages = ["/login"];
+  const publicPages = ["/login", "/register"];
   const authRequired = !publicPages.includes(to.path);
   const loggedIn = localStorage.getItem("user");
   // trying to access a restricted page + not logged in

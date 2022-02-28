@@ -145,6 +145,7 @@ export default {
 <style scoped>
 .post-wrapper {
   background-color: var(--color-background-mute);
+  margin-top: 20px;
 }
 
 .post-wrapper h2 {
@@ -224,6 +225,7 @@ a .counter {
   margin-left: 10px;
   margin-right: 10px;
   margin-bottom: 5px;
+  word-wrap: break-word;
 }
 
 .comments .username {

@@ -1,12 +1,17 @@
 <template>
   <div>
-    <Form @submit="handleLogin">
-      <label>Username: </label> <Field name="username" type="text" />
-      <label for="password">Password</label>
-      <Field name="password" type="password" class="form-control" />
+    <Form @submit="handleRegister">
+      <div class="row-thing">
+        <label>Username: </label> <Field name="username" type="text" />
+      </div>
+      <div class="row-thing">
+        <label for="password">Password: </label>
+        <Field name="password" type="password" class="form-control" />
+      </div>
+
       <button :disabled="loading">
         <span v-show="loading" class="spinner-border spinner-border-sm"></span>
-        <span>Login</span>
+        <span>Register</span>
       </button>
       <div class="form-group">
         <div v-if="message" class="alert alert-danger" role="alert">
@@ -42,7 +47,6 @@ export default {
   },
   computed: {
     loggedIn(): any {
-      console.log(this.$store?.state?.auth);
       return this.$store?.state?.auth?.status?.loggedIn || false;
     },
   },
@@ -52,9 +56,9 @@ export default {
     }
   },
   methods: {
-    handleLogin(user: any) {
+    handleRegister(user: any) {
       this.loading = true;
-      this.$store.dispatch("auth/login", user).then(
+      this.$store.dispatch("auth/register", user).then(
         () => {
           this.$router.push("/");
         },
@@ -73,4 +77,39 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+form {
+  background-color: var(--color-background-mute);
+  padding: 50px;
+  border-radius: 20px;
+  min-width: 350px;
+  width: 25vw;
+  text-align: right;
+  font-weight: bolder;
+}
+
+form .row-thing {
+  width: 100%;
+  display: flex;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+form .row-thing label {
+  width: 20%;
+}
+form .row-thing input {
+  width: 80%;
+}
+
+form button {
+  cursor: pointer;
+  display: inline-block;
+  color: var(--color-text-link);
+  background-color: var(--color-background-mute);
+  border: 2px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 5px;
+}
+</style>

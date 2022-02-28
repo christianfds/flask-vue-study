@@ -29,7 +29,6 @@ export default {
 
 <template>
   <header>
-    <!-- <HelloWorld msg="You did it!" /> -->
     <nav>
       <HeaderButton
         logout="false"
@@ -56,12 +55,29 @@ export default {
         title="Logout"
         class="align-right"
       ></HeaderButton>
+      <HeaderButton
+        v-if="!currentUser"
+        logout="false"
+        destination="/login"
+        title="Login"
+        class="align-right"
+      ></HeaderButton>
+      <HeaderButton
+        v-if="!currentUser"
+        logout="false"
+        destination="register"
+        title="Register"
+        class="align-right"
+      ></HeaderButton>
     </nav>
   </header>
 </template>
 
 <style>
 header {
+  z-index: 20;
+  background-color: var(--color-background-mute);
+  box-shadow: 0px 0px 15px 5px rgba(0, 0, 0, 0.68);
   position: sticky;
   top: 0;
   left: 0;
@@ -69,7 +85,6 @@ header {
   line-height: 1.5;
   height: 50px;
   min-height: 20px;
-  max-height: auto;
 }
 
 .align-left {
