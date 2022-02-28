@@ -71,12 +71,12 @@ class PhotosService:
             {
                 '$sort': {'created_at': -1}
             },
-            {
-                '$skip': page * page_size
-            },
-            {
-                '$limit': page_size
-            }
+            # {
+            #     '$skip': page * page_size
+            # },
+            # {
+            #     '$limit': page_size
+            # }
         ])
 
         # Parses id to string

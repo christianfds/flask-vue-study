@@ -79,6 +79,10 @@ export default {
         });
       }
 
+      if (!data.title || !data.file_input) {
+        this.loading = false;
+      }
+
       let send_data = {
         title: data.title,
         file: {
