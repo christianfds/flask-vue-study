@@ -20,6 +20,7 @@ Trying to use Flask and Vue to build a simple application and learn more on both
 
 ### [POST] auth/
 Performs the login.
+
 **Body:**
 
     {
@@ -41,12 +42,16 @@ Performs the login.
 	
 ### [DELETE] auth/
 *Requires a Authorization header*
+
 Performs the logout.
 
 ### [GET] auth/ 
 *Admin only*
+
 *Requires a Authorization header*
+
 Its a `Who am I`
+
 **Gives the same response as [POST] auth/**
 
 ### [POST] auth/register
@@ -62,7 +67,9 @@ Register a new user
 
 ### [GET] photos/
 *Requires a Authorization header*
+
 Gets a list of approved photos.
+
 **Response:**
 
 	[
@@ -105,7 +112,9 @@ Gets a list of approved photos.
 
 ### [POST] photos/
 *Requires a Authorization header*
+
 Submits a new photo to approval.
+
 **Response:**
 
 	{
@@ -117,7 +126,9 @@ Submits a new photo to approval.
 
 ### [GET] photos/\<string:photo_id\>
 *Requires a Authorization header*
+
 Fetches a single photo.
+
 **Response:**
 
 		{
@@ -140,15 +151,23 @@ Fetches a single photo.
 
 ### [GET] photos/pending
 *Requires a Authorization header*
+
 *Admin only*
+
 Fetches all images pending approval
+
+
 **Response:**
+
 Actually its the same of **[GET] photos/**
 
 ### [POST] photos/pending/\<string:photo_id\>
 *Requires a Authorization header*
+
 *Admin only*
+
 Sets a photo to `Approved` or `Denied`.
+
 **Body:**
 
 	{
@@ -158,12 +177,16 @@ Sets a photo to `Approved` or `Denied`.
 
 ### [DELETE] photos/\<string:photo_id\>
 *Requires a Authorization header*
+
 *Not implemented*
+
 Deletes a given photo.
 
 ### [POST] photos/\<string:photo_id\>/comment
 *Requires a Authorization header*
+
 Submits a comment to a photo.
+
 **Body:**
 	
 	{
@@ -172,13 +195,17 @@ Submits a comment to a photo.
 
 ### [DELETE] photos/\<string:photo_id\>/comment/\<string:comment_id\>
 *Requires a Authorization header*
+
 *Not implemented*
+
 Deletes a comment.
 
 ### [POST] photos/\<string:photo_id\>/react
 *Requires a Authorization header*
+
 Adds a reaction to a given photo, fixed on `like`'s for now.
 
 ### [DELETE] photos/\<string:photo_id\>/react
 *Requires a Authorization header*
+
 Removes a reaction, fixed on `like`'s for now.
