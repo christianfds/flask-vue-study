@@ -1,6 +1,6 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-const API_URL = "http://localhost:5000";
+const API_URL = import.meta.env.VITE_API_URL;
 class UserService {
   approvePending(photo_id: string) {
     return axios.post(
